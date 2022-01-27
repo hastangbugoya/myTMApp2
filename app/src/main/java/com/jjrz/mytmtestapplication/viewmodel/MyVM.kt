@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.jjrz.mytmtestapplication.model.Posts
 import com.jjrz.mytmtestapplication.model.Summary
-import com.jjrz.mytmtestapplication.model.users
+import com.jjrz.mytmtestapplication.model.Users
 import com.jjrz.mytmtestapplication.utility.DebugHelper.Companion.LogKitty
 import retrofit2.Call
 import retrofit2.Callback
@@ -14,25 +14,26 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 
 class MyVM : ViewModel() {
-    var userList = MutableLiveData<users?>().apply { value = null }
+    var userList = MutableLiveData<Users?>().apply { value = null }
     var postsList = MutableLiveData<Posts?>().apply { value = null }
     var summaryList = MutableLiveData<MutableList<Summary>>()
     private val retrofit: Retrofit = Retrofit.Builder()
         .baseUrl("https://jsonplaceholder.typicode.com/")
         .addConverterFactory(GsonConverterFactory.create())
         .build()
+
     fun getUserData() {
         val service = retrofit.create(MyDataService::class.java)
         val call = service.getUsers()
         LogKitty("Retrofit1")
-        call.enqueue(object : Callback<users> {
-            override fun onResponse(call: Call<users>, response: Response<users>) {
+        call.enqueue(object : Callback<Users> {
+            override fun onResponse(call: Call<Users>, response: Response<Users>) {
                 if (response.code() == 200) {
                     LogKitty("Assigning value to userList")
                     userList.postValue(response.body())
                 }
             }
-            override fun onFailure(call: Call<users>, t: Throwable) {
+            override fun onFailure(call: Call<Users>, t: Throwable) {
                 userList.postValue(null)
                 LogKitty(t.toString())
             }
@@ -61,7 +62,7 @@ class MyVM : ViewModel() {
 
     interface MyDataService {
         @GET("forecast")
-        fun getUsers(): Call<users>
+        fun getUsers(): Call<Users>
 
         @GET("posts")
         fun getPosts(): Call<Posts>
