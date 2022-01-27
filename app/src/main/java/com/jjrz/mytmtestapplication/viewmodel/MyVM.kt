@@ -14,9 +14,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 
 class MyVM : ViewModel() {
-    lateinit var userList : MutableLiveData<users?>
-    lateinit var postsList : MutableLiveData<Posts?>
-    lateinit var summaryList : MutableLiveData<MutableList<Summary>>
+    var userList = MutableLiveData<users?>().apply { value = null }
+    var postsList = MutableLiveData<Posts?>().apply { value = null }
+    var summaryList = MutableLiveData<MutableList<Summary>>()
     private val retrofit: Retrofit = Retrofit.Builder()
         .baseUrl("https://jsonplaceholder.typicode.com/")
         .addConverterFactory(GsonConverterFactory.create())
@@ -37,7 +37,7 @@ class MyVM : ViewModel() {
                 LogKitty(t.toString())
             }
         })
-        LogKitty("Retrofit2" + userList.value?.size)
+//        LogKitty("Retrofit2" + userList.value?.size)
     }
 
     fun getPostsData() {
@@ -56,7 +56,7 @@ class MyVM : ViewModel() {
                 LogKitty(t.toString())
             }
         })
-        LogKitty("Retrofit4" + postsList.value?.size)
+//        LogKitty("Retrofit4" + postsList.value?.size)
     }
 
     interface MyDataService {
