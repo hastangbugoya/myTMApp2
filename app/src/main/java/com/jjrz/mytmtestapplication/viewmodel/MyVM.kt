@@ -61,7 +61,7 @@ class MyVM : ViewModel() {
     }
 
     interface MyDataService {
-        @GET("forecast")
+        @GET("users")
         fun getUsers(): Call<Users>
 
         @GET("posts")
@@ -69,6 +69,7 @@ class MyVM : ViewModel() {
     }
 
     fun consolidateLists() {
+        LogKitty("Consolidating List")
         userList.value?.forEach { usersItem ->
             val list = postsList.value?.filter {
                 it.id == usersItem.id

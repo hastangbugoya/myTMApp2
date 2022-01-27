@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.lifecycle.ViewModelProvider
 import com.jjrz.mytmtestapplication.databinding.ActivityMainBinding
+import com.jjrz.mytmtestapplication.utility.DebugHelper.Companion.LogKitty
 import com.jjrz.mytmtestapplication.viewmodel.MyVM
 
 class MainActivity : AppCompatActivity() {
@@ -22,11 +23,13 @@ class MainActivity : AppCompatActivity() {
         myVM.getPostsData()
         myVM.getUserData()
         myVM.userList.observe(this) {
+            LogKitty("users change detected")
             if (myVM.postsList.value != null) {
                 myVM.consolidateLists()
             }
         }
         myVM.postsList.observe(this) {
+            LogKitty("posts change detected")
             if (myVM.userList.value != null) {
                 myVM.consolidateLists()
             }
