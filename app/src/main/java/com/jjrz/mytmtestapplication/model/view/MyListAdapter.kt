@@ -40,4 +40,9 @@ class MyListAdapter : RecyclerView.Adapter<MyListAdapter.ListViewHolder>() {
     }
 
     override fun getItemCount(): Int = myDisplayList?.size ?: 0
+
+    fun AddSample() {
+        myDisplayList?.add(Summary("test3","test3","test3"))
+        myDisplayList?.add(Summary("test4","test4","test4"))
+    }
 }

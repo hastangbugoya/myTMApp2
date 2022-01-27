@@ -14,11 +14,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(LayoutInflater.from(this))
-        myVM = ViewModelProvider(this).get(MyVM::class.java)
-        val adapter = MyListAdapter()
         val view = binding.root
         setContentView(view)
+        val adapter = MyListAdapter()
         binding.mainRecyclerview.adapter = adapter
+        myVM = ViewModelProvider(this).get(MyVM::class.java)
 
         myVM.getPostsData()
         myVM.getUserData()
@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
             LogKitty("summary change detected")
             adapter.updateList(myVM.summaryList.value)
         }
-
+        adapter.AddSample()
         myVM.addSummmary()
     }
 }
