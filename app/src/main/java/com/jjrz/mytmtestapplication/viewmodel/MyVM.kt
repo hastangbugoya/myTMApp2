@@ -18,7 +18,7 @@ class MyVM : ViewModel() {
     var userList = MutableLiveData<Users?>().apply { value = null}
     var postsList = MutableLiveData<Posts?>().apply { value = null}
     var summaryList = MutableLiveData<MutableList<Summary>>()
-    private val retrofit: Retrofit = Retrofit.Builder()
+    private val retrofit = Retrofit.Builder()
         .baseUrl("https://jsonplaceholder.typicode.com/")
         .addConverterFactory(GsonConverterFactory.create())
         .build()
@@ -28,8 +28,7 @@ class MyVM : ViewModel() {
         val call = service.getUsers()
         LogKitty("Retrofit1")
         call.enqueue(object : Callback<Users> {
-            override fun onResponse(call: Call<Users>, response: Response<Users>) {
-                val templist = Users()
+            override fun onResponse(call: Call<Users>, response: Response<Users?>) {
                 if (response.code() == 200) {
                     LogKitty("Assigning value to userList")
                     LogKitty("Users : " + response.body()?.size.toString())
@@ -49,7 +48,7 @@ class MyVM : ViewModel() {
         val call = service.getPosts()
         LogKitty("Retrofit2")
         call.enqueue(object : Callback<Posts> {
-            override fun onResponse(call: Call<Posts>, response: Response<Posts>) {
+            override fun onResponse(call: Call<Posts>, response: Response<Posts?>) {
                 if (response.code() == 200) {
                     LogKitty("Assigning value to postsList")
                     LogKitty("Posts : " + response.body()?.size.toString())
@@ -82,5 +81,15 @@ class MyVM : ViewModel() {
                 summaryList.value?.add(Summary(usersItem.company?.name,it.title,it.body))
             }
         }
+        LogKitty("summaryList : " + summaryList.value?.size)
+    }
+
+    fun addSummmary() {
+        LogKitty("Adding to summaryList")
+        summaryList.value?.apply {
+            this.add(Summary("test","test","test"))
+            this.add(Summary("test2","test2","test2"))
+        }
+        LogKitty("summaryList after add : " + summaryList.value?.size)
     }
 }

@@ -35,7 +35,10 @@ class MainActivity : AppCompatActivity() {
             }
         }
         myVM.summaryList.observe(this) {
+            LogKitty("summary change detected")
             adapter.updateList(myVM.summaryList.value)
         }
+
+        myVM.addSummmary()
     }
 }

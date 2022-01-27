@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.jjrz.mytmtestapplication.databinding.ListItemBinding
 import com.jjrz.mytmtestapplication.model.Summary
+import com.jjrz.mytmtestapplication.utility.DebugHelper.Companion.LogKitty
 
 class MyListAdapter : RecyclerView.Adapter<MyListAdapter.ListViewHolder>() {
     var myDisplayList: MutableList<Summary>? = null
@@ -12,6 +13,7 @@ class MyListAdapter : RecyclerView.Adapter<MyListAdapter.ListViewHolder>() {
     fun updateList(f: MutableList<Summary>?) {
         myDisplayList = f
         notifyDataSetChanged()
+        LogKitty("adapted list updated")
     }
 
     inner class ListViewHolder(binding: ListItemBinding) :
