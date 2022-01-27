@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import com.jjrz.mytmtestapplication.model.Posts
 import com.jjrz.mytmtestapplication.model.Summary
 import com.jjrz.mytmtestapplication.model.Users
+import com.jjrz.mytmtestapplication.model.usersItem
 import com.jjrz.mytmtestapplication.utility.DebugHelper.Companion.LogKitty
 import retrofit2.Call
 import retrofit2.Callback
@@ -14,8 +15,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 
 class MyVM : ViewModel() {
-    var userList = MutableLiveData<Users?>().apply { value = null }
-    var postsList = MutableLiveData<Posts?>().apply { value = null }
+    var userList = MutableLiveData<Users?>().apply { value = null}
+    var postsList = MutableLiveData<Posts?>().apply { value = null}
     var summaryList = MutableLiveData<MutableList<Summary>>()
     private val retrofit: Retrofit = Retrofit.Builder()
         .baseUrl("https://jsonplaceholder.typicode.com/")
@@ -28,9 +29,12 @@ class MyVM : ViewModel() {
         LogKitty("Retrofit1")
         call.enqueue(object : Callback<Users> {
             override fun onResponse(call: Call<Users>, response: Response<Users>) {
+                val templist = Users()
                 if (response.code() == 200) {
                     LogKitty("Assigning value to userList")
+                    LogKitty("Users : " + response.body()?.size.toString())
                     userList.postValue(response.body())
+                    LogKitty("userList : " + userList.value?.size.toString())
                 }
             }
             override fun onFailure(call: Call<Users>, t: Throwable) {
@@ -38,18 +42,19 @@ class MyVM : ViewModel() {
                 LogKitty(t.toString())
             }
         })
-//        LogKitty("Retrofit2" + userList.value?.size)
     }
 
     fun getPostsData() {
         val service = retrofit.create(MyDataService::class.java)
         val call = service.getPosts()
-        LogKitty("Retrofit3")
+        LogKitty("Retrofit2")
         call.enqueue(object : Callback<Posts> {
             override fun onResponse(call: Call<Posts>, response: Response<Posts>) {
                 if (response.code() == 200) {
                     LogKitty("Assigning value to postsList")
+                    LogKitty("Posts : " + response.body()?.size.toString())
                     postsList.postValue(response.body())
+                    LogKitty("postsList : " + postsList.value?.size.toString())
                 }
             }
             override fun onFailure(call: Call<Posts>, t: Throwable) {
@@ -57,7 +62,6 @@ class MyVM : ViewModel() {
                 LogKitty(t.toString())
             }
         })
-//        LogKitty("Retrofit4" + postsList.value?.size)
     }
 
     interface MyDataService {
