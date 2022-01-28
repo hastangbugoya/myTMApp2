@@ -35,7 +35,7 @@ class MyVM : ViewModel() {
                     LogKitty("Users : " + response.body()?.size.toString())
                     response.body()?.forEach {
                         temp.add(it)
-                        LogKitty(it.toString())
+//                        LogKitty(it.toString())
                     }
                     userList.value = temp
                     LogKitty("userList : " + userList.value?.size)
@@ -57,9 +57,10 @@ class MyVM : ViewModel() {
                 val temp = Posts()
                 if (response.code() == 200) {
                     LogKitty("Assigning value to postsList")
-//                    LogKitty("Posts : " + response.body()?.size.toString())
+                    LogKitty("Posts response : " + response.body()?.size.toString())
                     response.body()?.forEach {
                         temp.add(it)
+//                        LogKitty(it.toString())
                     }
                     postsList.value = temp
 //                    postsList.postValue(response.body())
@@ -84,11 +85,10 @@ class MyVM : ViewModel() {
     fun consolidateLists() {
         LogKitty("Consolidating List")
         userList.value?.forEach { usersItem ->
-            val list = postsList.value?.filter {
-                it.id == usersItem.id
-            }
-            list?.forEach {
-                summaryList.value?.add(Summary(usersItem.company?.name,it.title,it.body))
+            postsList.value?.forEach {
+                if (it.id == usersItem.id) {
+                    summaryList.value?.add(Summary(usersItem.company?.name,it.title,it.body))
+                }
             }
         }
         LogKitty("summaryList : " + summaryList.value?.size)
