@@ -15,8 +15,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 
 class MyVM : ViewModel() {
-    var userList = MutableLiveData<Users?>().apply { value = null}
-    var postsList = MutableLiveData<Posts?>().apply { value = null}
+    var userList = MutableLiveData<Users?>().apply { value = Users() }
+    var postsList = MutableLiveData<Posts?>().apply { value = Posts() }
     var summaryList = MutableLiveData<MutableList<Summary>>()
     private val retrofit = Retrofit.Builder()
         .baseUrl("https://jsonplaceholder.typicode.com/")
@@ -28,12 +28,17 @@ class MyVM : ViewModel() {
         val call = service.getUsers()
         LogKitty("Retrofit1")
         call.enqueue(object : Callback<Users> {
-            override fun onResponse(call: Call<Users>, response: Response<Users?>) {
+            override fun onResponse(call: Call<Users>, response: Response<Users>) {
+                val temp = Users()
                 if (response.code() == 200) {
                     LogKitty("Assigning value to userList")
                     LogKitty("Users : " + response.body()?.size.toString())
-                    userList.postValue(response.body())
-                    LogKitty("userList : " + userList.value?.size.toString())
+                    response.body()?.forEach {
+                        temp.add(it)
+                        LogKitty(it.toString())
+                    }
+                    userList.value = temp
+                    LogKitty("userList : " + userList.value?.size)
                 }
             }
             override fun onFailure(call: Call<Users>, t: Throwable) {
@@ -48,12 +53,17 @@ class MyVM : ViewModel() {
         val call = service.getPosts()
         LogKitty("Retrofit2")
         call.enqueue(object : Callback<Posts> {
-            override fun onResponse(call: Call<Posts>, response: Response<Posts?>) {
+            override fun onResponse(call: Call<Posts>, response: Response<Posts>) {
+                val temp = Posts()
                 if (response.code() == 200) {
                     LogKitty("Assigning value to postsList")
-                    LogKitty("Posts : " + response.body()?.size.toString())
-                    postsList.postValue(response.body())
-                    LogKitty("postsList : " + postsList.value?.size.toString())
+//                    LogKitty("Posts : " + response.body()?.size.toString())
+                    response.body()?.forEach {
+                        temp.add(it)
+                    }
+                    postsList.value = temp
+//                    postsList.postValue(response.body())
+                    LogKitty("postsList : " + postsList.value?.size)
                 }
             }
             override fun onFailure(call: Call<Posts>, t: Throwable) {

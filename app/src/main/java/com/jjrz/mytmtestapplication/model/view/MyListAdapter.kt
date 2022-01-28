@@ -8,9 +8,9 @@ import com.jjrz.mytmtestapplication.model.Summary
 import com.jjrz.mytmtestapplication.utility.DebugHelper.Companion.LogKitty
 
 class MyListAdapter : RecyclerView.Adapter<MyListAdapter.ListViewHolder>() {
-    var myDisplayList: MutableList<Summary>? = null
+    private var myDisplayList = mutableListOf<Summary>()
 
-    fun updateList(f: MutableList<Summary>?) {
+    fun updateList(f: MutableList<Summary>) {
         myDisplayList = f
         notifyDataSetChanged()
         LogKitty("adapted list updated")
